@@ -48,9 +48,11 @@ session.path.set = /mnt16/session/
 # rtorrent каждые 5 секунд проверяет этот каталог на новые *.torrent файлы и если
 # они есть то ставит их на закачку.
 schedule = watch_directory,5,5,load.start=/mnt16/torrent_files/*.torrent
+# а если нет, то удаляет. Поэтому можно смело удалять файлы незапуская сам rtorrent. )
+schedule = watch_untied,5,5,((remove_untied))
 
-# Перемещает загруженный файл в другую папку после окончания закачки
-#on_finished = move_complete,"execute=mv,-u,$d.base_path=,/mnt16/torrent_fully_finished/ ;d.directory.set=/mnt16/torrent_fully_finished/"
+# Перемещает загруженный файл в другую папку после окончания закачки и продолжает раздачу от туда.
+system.method.set_key = event.download.finished,move_complete,"d.set_directory=/mnt16/torrent_fully_finished/;execute=mv,-u,$d.get_base_path=,/mnt16/torrent_fully_finished/"
 
 # Отправка сообщений почтой когда завершится загрузка. Скрипт написан ниже как пример.
 # #!/bin/sh
