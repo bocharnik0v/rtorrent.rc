@@ -43,22 +43,23 @@ system.file.allocate.set = yes
 schedule = low_diskspace,5,60,close_low_diskspace=16M
 
 # Каталог куда будет сохраняться состояние торрентов, т.е их сессии.
-session.path.set = /mnt16/session/
+session.path.set = /mnt2/torrent_session/
 
 # rtorrent каждые 5 секунд проверяет этот каталог на новые *.torrent файлы и если
 # они есть то ставит их на закачку.
-schedule = watch_directory,5,5,load.start=/mnt16/torrent_files/*.torrent
+schedule = watch_directory,5,5,load.start=/mnt2/torrent_files/*.torrent
 # а если нет, то удаляет. Поэтому можно смело удалять файлы незапуская сам rtorrent. )
 schedule = watch_untied,5,5,((remove_untied))
 
 # Перемещает загруженный файл в другую папку после окончания закачки и продолжает раздачу от туда.
 system.method.set_key = event.download.finished,move_complete,"d.set_directory=/mnt16/torrent_fully_finished/;execute=mv,-u,$d.get_base_path=,/mnt16/torrent_fully_finished/"
 
-# Отправка сообщений почтой когда завершится загрузка. Скрипт написан ниже как пример.
-# #!/bin/sh
-# 
-# echo "$(date '+Дата скачки: %m.%d.%Y%nВремя скачки: %H:%M:%S')\nСкачано: $1" | mail -s "Download completed!" your_personal@email.com
-method.set_key = event.download.finished,notify_me,"execute=/root/rtorrent_mail.sh,$d.name="
+# Отправка сообщений почтой когда завершится загрузка и запись в лог файл. Скрипт написан ниже как пример.
+#!/bin/sh
+#LOG=/mnt2/log/rtorrent_custom.log
+#echo "$(date '+%m.%d.%Y %H:%M:%S - Загрузка завершена:')" $1 >> $LOG
+#awk 'END{print}' $LOG | mail -s "Download completed!" your_personal@email.com
+method.set_key = event.download.finished,notify_me,"execute=/root/rtorrent_customlog.sh,$d.name="
 
 # Номер порта (или нескольких портов) который открывает клиент для обмена данными.
 network.port_range.set = 40890-40890
