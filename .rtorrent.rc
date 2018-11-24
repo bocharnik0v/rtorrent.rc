@@ -7,11 +7,11 @@
 # Параметр min_peers позволяет rTorrent использовать более агрессивное поведение
 # до тех пор, пока он не найдет это количество узлов, и не перестанет долбиться дo
 # победного. Параметр max_peers - наоборт. Но не забывайте что эти узлы могут так же
-# пропадать или быть забанены. Поэтому 100 пиров это норма. (с)
+# пропадать или быть забанены. Поэтому 200 пиров это норма. (с)
 throttle.min_peers.normal.set = 1
-throttle.max_peers.normal.set = 100
+throttle.max_peers.normal.set = 200
 
-# Обмен пирами (for torrents not marked private)
+# Обмен пирами через PeX (for torrents not marked private)
 protocol.pex.set = yes
 
 #------------------------------------------------------------------------------------+
@@ -62,7 +62,7 @@ system.method.set_key = event.download.finished,move_complete,"d.set_directory=/
 method.set_key = event.download.finished,notify_me,"execute=/root/rtorrent_customlog.sh,$d.name="
 
 # Номер порта (или нескольких портов) который открывает клиент для обмена данными.
-network.port_range.set = 40890-40890
+network.port_range.set = 80-40890
 
 # Случайный выбор порта для обмена данными. В данном случае он включен.
 network.port_random.set = yes
@@ -71,20 +71,28 @@ network.port_random.set = yes
 pieces.hash.on_completion.set = yes
 
 # Сохранять сессию
-session_save = no
+session_save = yes
 
 # Указанно: "Принимать зашифрованные входящие соединения", "устанавливать незашифрованные исходящие соединения".
 # Если возвращает ошибку, повторять с шифрованием, предпочитать открытый текст после установления зашифрованного соединения.
 protocol.encryption.set = allow_incoming,enable_retry,prefer_plaintext
 
 # Использовать UDP
-trackers.use_udp.set = yes
+trackers.use_udp.set = no
 
 # Разрешает работу DHT для безтрекерных торрентов или для случаев, когда все ретрекеры лежат (не работают).
 # Может принимать значения "disable" (для полного отключения DHT), "off" (не стартует с DHT), 
 # "auto" (Включает DHT при возможности), или "on" (принудительно включает DHT).
 # Значение DHT по умолчанию "off". Для правильной работы DHT каталог сеансов "session" должен быть определен.
-dht.mode.set = auto
+dht.mode.set = on
 
 # UDP порт, используемый DHT.
 dht.port.set = 6881
+
+# Enable the default ratio group.
+#ratio.enable=
+
+# Change the limits, the defaults should be sufficient.
+#ratio.min.set=400
+#ratio.max.set=2000
+#ratio.upload.set=250M
