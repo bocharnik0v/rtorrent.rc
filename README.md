@@ -14,11 +14,15 @@ sudo -u root screen -fa -d -m rtorrent
 ```
 4) Просмотр всех запущенных **screen**(ов):
 ```
-screen -ls
+screen --list
 ```
 5) Переключиться в единственный **screen**:
 ```
 screen -x
+```
+6) Отсоеденится от  **screen**:
+```
+Ctrl+A и потом D
 ```
 
 ## Памятка по навигации
